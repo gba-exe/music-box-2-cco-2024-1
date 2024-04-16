@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import api from "./api";
+import { useState } from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [musicas, setMusicas] = useState([]);
+
+    function listar() {
+        api.get()
+            .then((resposta) => {
+                console.log(resposta);
+                console.log(resposta.status);
+                console.log(resposta.data);
+
+                setMusicas(resposta.data)
+            })
+            .catch((resposta) => {
+                console.log(resposta);
+            })
+    }
+
+    return (
+        <>
+            <h1>Hello World!</h1>
+            <button onClick={listar}>Listar</button>
+            {
+                musicas.map(musica => (
+                    <div key={musica.id}>
+                        <h1>{musica.nomeMusica} - {musica.artista}</h1>
+                        <h2>{musica.genero}</h2>
+                        <p>{musica.ano}</p>
+                        <img src={musica.imagem} alt="Gato"></img>
+                    </div>
+                ))
+            }
+        </>
+    );
 }
 
 export default App;
